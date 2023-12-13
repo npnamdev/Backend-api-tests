@@ -16,21 +16,21 @@ cloudinary.config({
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// Endpoint để tải lên ảnh
-app.post('/upload', upload.single('image'), (req, res) => {
-    // Kiểm tra xem có ảnh được tải lên không
+// Endpoint để tải lên file
+app.post('/upload', upload.single('file'), (req, res) => {
+    // Kiểm tra xem có file được tải lên không
     if (!req.file) {
-        return res.status(400).send('No image uploaded.');
+        return res.status(400).send('No file uploaded.');
     }
 
-    // Tải ảnh lên Cloudinary
-    cloudinary.uploader.upload_stream({ resource_type: 'image' }, (error, result) => {
+    // Tải file lên Cloudinary
+    cloudinary.uploader.upload_stream({ resource_type: 'auto' }, (error, result) => {
         if (error) {
-            return res.status(500).send('Error uploading image to Cloudinary.');
+            return res.status(500).send('Error uploading file to Cloudinary.');
         }
 
-        // Trả về đường dẫn của ảnh đã tải lên
-        res.json({ imageUrl: result.secure_url });
+        // Trả về đường dẫn của file đã tải lên
+        res.json({ fileUrl: result.secure_url });
     }).end(req.file.buffer);
 });
 
